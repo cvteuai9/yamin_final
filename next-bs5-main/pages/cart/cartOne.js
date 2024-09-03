@@ -98,6 +98,7 @@ export default function CardOne() {
   }
 
   function testSub(e) {
+    console.log(courseCart.items.length)
     console.log('我想取優惠券的id', e.target.value)
     console.log(e.target.options[e.target.selectedIndex])
     // 下面這一行是我select選到的option選項
@@ -112,7 +113,17 @@ export default function CardOne() {
     // setSelectedId
   }
   function handleSubmit() {
-    router.push('http://localhost:3000/cart/cartTwoTest')
+    console.log(courseCart.items.length)
+    if (items.length === 0 && courseCart.items.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤!',
+        text: '您沒有購買任何東西',
+      })
+    }
+    if (items.length !== 0 || courseCart.items.length !== 0) {
+      router.push('http://localhost:3000/cart/cartTwoTest')
+    }
   }
   // console.log('課程資訊')
   return (
