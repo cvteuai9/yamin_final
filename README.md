@@ -2,7 +2,7 @@
 Yaimin
 ===
 # 歡迎大家來到雅茗
-<div align=center><img width="200" height="200" src="https://memeprod.ap-south-1.linodeobjects.com/user-template/834ce8fcd70f1d71ba160134c0c2335f.png" /></div>
+<div align=center><img width="350" height="200" src="https://github.com/user-attachments/assets/25adba3d-ccd2-40a3-a54f-69643169befb" /></div>
 
 ## 注意事項
 # Git指令
