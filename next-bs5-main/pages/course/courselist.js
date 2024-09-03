@@ -12,7 +12,6 @@ import { YaminCourseCartProvider } from '@/hooks/yamin-use-Course-cart'
 import toast, { Toaster } from 'react-hot-toast'
 import { YaminCourseUseCart } from '@/hooks/yamin-use-Course-cart'
 import { useAuth } from '@/hooks/my-use-auth'
-import Swal from 'sweetalert2'
 export default function Course() {
   // 購物車部分
   const { addItem = () => {} } = YaminCourseUseCart()
@@ -148,33 +147,11 @@ export default function Course() {
                 `http://localhost:3005/api/course/favorites?user_id=${userID}&course_id=${v.id}`,
                 { method: 'PUT' }
               )
-                .then((res) => res.json())
-                .then((result) => {
-                  if (
-                    result.message === 'Favorite Course Insert successfully'
-                  ) {
-                    toast.success(<p className="m-0">加入收藏成功!</p>)
-                  } else {
-                    toast.error(<p className="m-0">加入收藏失敗!</p>)
-                  }
-                })
-                .catch((error) => console.log(error))
             } else {
               fetch(
                 `http://localhost:3005/api/course/favorites?user_id=${userID}&course_id=${v.id}`,
                 { method: 'DELETE' }
               )
-                .then((res) => res.json())
-                .then((result) => {
-                  if (
-                    result.message === 'Favorite Course deleted successfully'
-                  ) {
-                    toast.success(<p className="m-0">移除收藏成功!</p>)
-                  } else {
-                    toast.error(<p className="m-0">移除收藏失敗!</p>)
-                  }
-                })
-                .catch((error) => console.log(error))
             }
             return { ...v, fav: !v.fav }
           } else {
@@ -183,20 +160,9 @@ export default function Course() {
         })
         setCourses(nextData)
       } else {
-        Swal.fire({
-          title: '無法收藏',
-          text: '您尚未登入，請登入後再操作!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: '登入',
-          cancelButtonText: '取消',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            router.push('/member/login')
-          }
-        })
+        if (confirm('您尚未登入，請登入後再操作!')) {
+          router.push('/member/login')
+        }
       }
     } catch (error) {
       console.error('Failed to toggle favorite:', error)
@@ -291,9 +257,7 @@ export default function Course() {
                 <div className="shane-course-wood mb-4" />
                 <div className="h1 shane-course-store row text-center justify-content-center">
                   課程
-                  <div className="shane-course-store p text-center ">
-                    Course
-                  </div>
+                  <div className="shane-course-store p text-center ">Course</div>
                 </div>
                 <div className="shane-course-wood mb-4" />
               </div>
@@ -515,9 +479,7 @@ export default function Course() {
                             <button
                               type="button"
                               className="btn like-btn"
-                              onClick={() =>
-                                handleFavToggle(courses, v.id, userID, isAuth)
-                              }
+                              onClick={() => handleFavToggle(courses, v.id)}
                             >
                               {v.fav ? (
                                 <img
@@ -666,7 +628,6 @@ export default function Course() {
             </div>
           </div>
         </div>
-        <Toaster />
       </>
     </>
   )

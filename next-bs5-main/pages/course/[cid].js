@@ -6,9 +6,6 @@ import categories from '@/data/course-data/category.json'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { useAuth } from '@/hooks/my-use-auth'
-import { YaminCourseUseCart } from '@/hooks/yamin-use-Course-cart'
-import toast, { Toaster } from 'react-hot-toast'
-import Swal from 'sweetalert2'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/free-mode'
@@ -23,20 +20,6 @@ export default function CourseDetail() {
   // 第1步: 宣告路由器
   // router.query 物件值，裡面會包含productCode屬性值
   // router.isReady 布林值，初次渲染會是false，next會經過"水合化作用"(相當於SSR)後，再渲染一次，讓isReady改變為true，代表水合化完成，此時才能得到query值
-  // 購物車
-  const { addItem = () => {} } = YaminCourseUseCart()
-  const notify = (name) => {
-    toast.success(
-      <>
-        <p>
-          {name + '  已成功加入購物車!'}
-          <br />
-          <Link href="/cart/cartOne">前往購物車</Link>
-        </p>
-      </>
-    )
-  }
-  //
   const router = useRouter()
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [comment, setComment] = useState([])
@@ -75,53 +58,18 @@ export default function CourseDetail() {
             `http://localhost:3005/api/course/favorites?user_id=${userID}&course_id=${course.id}`,
             { method: 'PUT' }
           )
-            .then((res) => res.json())
-            .then((result) => {
-              if (result.message === 'Favorite Course Insert successfully') {
-                toast.success(<p className="m-0">加入收藏成功!</p>)
-              } else {
-                toast.error(<p className="m-0">加入收藏失敗!</p>)
-              }
-            })
-            .catch((error) => console.log(error))
         } else {
           await fetch(
             `http://localhost:3005/api/course/favorites?user_id=${userID}&course_id=${course.id}`,
             { method: 'DELETE' }
           )
-            .then((res) => res.json())
-            .then((result) => {
-              if (result.message === 'Favorite Course deleted successfully') {
-                toast.success(<p className="m-0">移除收藏成功!</p>)
-              } else {
-                toast.error(<p className="m-0">移除收藏失敗!</p>)
-              }
-            })
-            .catch((error) => console.log(error))
         }
         let tmp = { ...course, fav: !course.fav }
         setCourse(tmp)
       } else {
-        // 原本寫的
-        // if (confirm('您尚未登入，請登入後再操作!')) {
-        //   router.push('/member/login')
-        // }
-        // Swal的confirm
-        Swal.fire({
-          title: '無法收藏',
-          text: '您尚未登入，請登入後再操作!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: '登入',
-          cancelButtonText: '取消',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            router.push('/member/login')
-          }
-        })
-
+        if (confirm('您尚未登入，請登入後再操作!')) {
+          router.push('/member/login')
+        }
       }
     } catch (error) {
       console.error('Failed to toggle favorite:', error)
@@ -396,16 +344,7 @@ export default function CourseDetail() {
                     className="me-3"
                   />
                   <div className="ms-3">
-                    <button
-                      type="button"
-                      className="btn rounded-pill"
-                      onClick={() => {
-                        const item = { ...course, qty: 1 }
-                        console.log(item)
-                        notify(course.name)
-                        addItem(item)
-                      }}
-                    >
+                    <button type="button" className="btn rounded-pill">
                       購買
                     </button>
                   </div>
@@ -595,7 +534,6 @@ export default function CourseDetail() {
             ))}
           </div>
         </div>
-        <Toaster />
       </>
     </>
   )
