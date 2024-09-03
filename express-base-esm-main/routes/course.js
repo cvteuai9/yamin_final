@@ -160,7 +160,7 @@ router.put('/favorites', async (req, res) => {
     )
     return res
       .status(200)
-      .json({ message: 'Favorite Course Insert successfully' })
+      .json({ message: 'Course Favorite Insert successfully' })
   } catch (error) {
     console.log(error)
     return res.status(400).json({ error: 'Invalid input data' })
@@ -175,9 +175,7 @@ router.delete('/favorites', async (req, res) => {
       'DELETE FROM favorites WHERE user_id = ? && course_id = ?',
       [user_id, course_id]
     )
-    return res
-      .status(200)
-      .json({ message: 'Favorite Course deleted successfully' })
+    return res.status(200).json({ message: 'User deleted successfully' })
   } catch (error) {
     console.log(error)
     return res.status(400).json({ error: 'Course Not Found' })
